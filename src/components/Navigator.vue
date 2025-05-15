@@ -3,9 +3,9 @@
 </script>
 
 <template>
-    <a href="/">Home</a> &nbsp;
-    <a href="/categories">Categories</a> &nbsp;
-    <a href="/about">About</a>
+  <router-link to="/">Home</router-link> &nbsp;
+  <router-link to="/categories">Categories</router-link> &nbsp;
+  <router-link to="/about">About</router-link>
 </template>
 
 <style scoped>
