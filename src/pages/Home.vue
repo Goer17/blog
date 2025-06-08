@@ -1,8 +1,11 @@
 <script setup lang="ts">
+import Navigator from '../components/Navigator.vue';
 </script>
 
 <template>
-    <h1>Home</h1>
+    <div id="home">
+        <Navigator />
+    </div>
 </template>
 
 <style scoped>
