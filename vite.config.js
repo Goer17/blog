@@ -3,10 +3,5 @@ import vue from '@vitejs/plugin-vue'
 
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [vue()],
-  css: {
-    preprocessorOptions: {
-      includePaths: ['node_modules/katex/dist']
-    }
-  }
+  plugins: [vue()]
 })
