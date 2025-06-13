@@ -5,6 +5,7 @@ import Navigator from '../components/Navigator.vue';
 <template>
     <div id="home">
         <Navigator />
+        <h1>Home</h1>
     </div>
 </template>
 

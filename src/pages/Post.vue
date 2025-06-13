@@ -1,6 +1,9 @@
 <script setup>
 import { ref, onMounted, computed, watch } from 'vue';
 import { useRoute } from 'vue-router';
+
+import Navigator from '../components/Navigator.vue';
+
 import MarkdownIt from 'markdown-it';
 import markdownItMathjax3 from 'markdown-it-mathjax3';
 import markdownItHighlightjs from 'markdown-it-highlightjs';
@@ -60,6 +63,7 @@ onMounted(loadMarkdownFile);
 
 <template>
   <div id="post">
+    <Navigator />
     <div v-if="isLoading" class="loading-spinner">
       <span>Loading...</span>
     </div>
