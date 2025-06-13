@@ -2,8 +2,6 @@
 import { ref, onMounted, computed, watch } from 'vue';
 import { useRoute } from 'vue-router';
 
-import Navigator from '../components/Navigator.vue';
-
 import MarkdownIt from 'markdown-it';
 import markdownItMathjax3 from 'markdown-it-mathjax3';
 import markdownItHighlightjs from 'markdown-it-highlightjs';
@@ -30,7 +28,7 @@ const isLoading = ref(false);
 async function loadMarkdownFile() {
     isLoading.value = true;
     const name = route.query.name?.toString() || '';
-    const path = `/posts/${name}.md`;
+    const path = `/_posts/${name}.md`;
     try {
         const response = await fetch(path, {
             headers: {
@@ -63,7 +61,6 @@ onMounted(loadMarkdownFile);
 
 <template>
   <div id="post">
-    <Navigator />
     <div v-if="isLoading" class="loading-spinner">
       <span>Loading...</span>
     </div>
