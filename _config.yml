@@ -1,1 +1,1 @@
-include: ["*.md"]
+include: ["posts.json", "posts/", "*.md"]
