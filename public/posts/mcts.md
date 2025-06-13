@@ -16,7 +16,6 @@ category:
 >  This is a reference.
 
 
-
 ```c++
 #include <iostream>
 
@@ -29,5 +28,5 @@ int main() {
 
 
 $$
-\sum_{i=1}^\infin \frac{1}{n^2} = \frac{\pi^2}{6}
+\sum_{i=1}^\infty \frac{1}{n^2} = \frac{\pi^2}{6}
 $$

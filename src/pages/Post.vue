@@ -2,8 +2,11 @@
 import { ref, onMounted, computed, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import MarkdownIt from 'markdown-it';
-import mk from 'markdown-it-katex';
-import 'katex/dist/katex.min.css'
+import markdownItMathjax3 from 'markdown-it-mathjax3';
+import markdownItHighlightjs from 'markdown-it-highlightjs';
+import markdownItTaskLists from 'markdown-it-task-lists';
+
+import 'highlight.js/styles/github.css';
 
 const route = useRoute();
 const content = ref('');
@@ -14,9 +17,10 @@ const md = new MarkdownIt({
   linkify: true,
   typographer: true
 })
-.use(mk);
-// .use(require('markdown-it-highlightjs'))
-// .use(require('markdown-it-task-lists'));
+.use(markdownItHighlightjs)
+.use(markdownItTaskLists)
+.use(markdownItMathjax3)
+
 
 const isLoading = ref(false);
 
@@ -55,11 +59,16 @@ onMounted(loadMarkdownFile);
 </script>
 
 <template>
-    <div id="post">
-        <div class="markdown-container">
-            <div v-html="renderedContent"></div>
-        </div>
+  <div id="post">
+    <div v-if="isLoading" class="loading-spinner">
+      <span>Loading...</span>
     </div>
+    <div v-else class="markdown-container">
+      <div v-html="renderedContent"></div>
+    </div>
+  </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+
+</style>
