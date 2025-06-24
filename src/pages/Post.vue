@@ -28,7 +28,7 @@ const isLoading = ref(false);
 async function loadMarkdownFile() {
     isLoading.value = true;
     const name = route.query.name?.toString() || '';
-    const path = `/_posts/${name}.md`;
+    const path = `/posts_/${name}.md`;
     try {
         const response = await fetch(path, {
             headers: {
