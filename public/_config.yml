@@ -1,4 +1,4 @@
-include: ["posts.json", "_posts/*.md"]
+include: ["posts.json", "_posts/",  "_posts/*.md"]
 
 markdown_ext: "html" # Do not convert Markdown files to HTML files
 permalink: none
