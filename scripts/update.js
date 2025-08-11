@@ -15,19 +15,31 @@ async function parseMetadata(dirPath) {
         }
         try {
             const info = yaml.load(postData[1]);
-            results.push({file, ...info})
+            results.push({file: file.slice(0, -3), ...info})
         }
         catch (e) {
             console.error(`[ERROR] can't parse meta info in the file ${file}: ${postData}`);
         }
     }
 
+    results.sort((a, b) => {
+        const aZIndex = a['z-index'] || 0;
+        const bZIndex = b['z-index'] || 0;
+        if (aZIndex !== bZIndex) {
+            return bZIndex - aZIndex;
+        }
+
+        const aTime = a.time ? new Date(a.time).getTime() : 0;
+        const bTime = b.time ? new Date(b.time).getTime() : 0;
+        return bTime - aTime;
+    });
+
     return results
 }
 
 (async () => {
     try {
-        const postsDir = './public/_posts';
+        const postsDir = './public/posts_';
         const outputPath = './public/posts.json';
         
         const results = await parseMetadata(postsDir);

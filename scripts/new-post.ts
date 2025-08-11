@@ -9,7 +9,7 @@ if (!postName) {
   process.exit(1);
 }
 
-const postsDir = path.resolve('public/_posts');
+const postsDir = path.resolve('public/posts_');
 const mdFilePath = path.join(postsDir, `${postName}.md`);
 
 // 1. Create posts directory if it does not exist
