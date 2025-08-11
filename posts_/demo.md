@@ -1,14 +1,19 @@
 ---
-title: demo
+title: Monte Carlo Tree Search
 time: 2025-6-13
-category: [category-1, category-2]
+category: ["Artificial Intelligence", "Reinforcement Learning"]
+image: res/demo.png
 ---
-
 # H1 title
+
 ## H2 title
+
 ### H3 title
+
 #### H4 title
+
 ##### H5 title
+
 ###### H6 tile
 
 **Bold Text**

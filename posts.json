@@ -1,11 +1,49 @@
 [
   {
-    "file": "demo.md",
-    "title": "demo",
+    "file": "grpo",
+    "title": "GRPO",
+    "time": "2025-8-11",
+    "category": [
+      "Artificial Intelligence",
+      "Reinforcement Learning"
+    ]
+  },
+  {
+    "file": "ppo",
+    "title": "PPO",
+    "time": "2025-8-11",
+    "category": [
+      "Artificial Intelligence",
+      "Reinforcement Learning"
+    ],
+    "image": "res/demo.png"
+  },
+  {
+    "file": "segtree",
+    "title": "Segment Tree",
+    "time": "2025-8-11",
+    "category": [
+      "Data Structure & Algorithm"
+    ],
+    "image": "res/demo.png"
+  },
+  {
+    "file": "trpo",
+    "title": "TRPO",
+    "time": "2025-8-11",
+    "category": [
+      "Artificial Intelligence",
+      "Reinforcement Learning"
+    ]
+  },
+  {
+    "file": "demo",
+    "title": "Monte Carlo Tree Search",
     "time": "2025-6-13",
     "category": [
-      "category-1",
-      "category-2"
-    ]
+      "Artificial Intelligence",
+      "Reinforcement Learning"
+    ],
+    "image": "res/demo.png"
   }
 ]
