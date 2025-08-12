@@ -33,6 +33,7 @@ const handleImageError = (e: Event) => {
           <span class="post-categories" v-if="category">
             <span class="post-category" v-for="(cat, index) in category" :key="cat">
               {{ cat }}<span v-if="index < category.length - 1"> &rArr; </span>
+              <span v-else style="color: transparent;"> &rArr; </span>
             </span>
           </span>
         </div>
@@ -55,6 +56,7 @@ const handleImageError = (e: Event) => {
   background: white;
   text-decoration: none;
   color: inherit;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   height: 160px;
 }
 
@@ -129,11 +131,11 @@ const handleImageError = (e: Event) => {
 @media (max-width: 768px) {
   .post-card {
     height: 140px;
-    flex-direction: column; /* 小屏幕改为垂直布局 */
+    flex-direction: column;
   }
   
   .post-image {
-    flex: 0 0 120px; /* 小屏幕固定图片高度 */
+    flex: 0 0 120px;
     width: 100%;
   }
   

@@ -28,6 +28,7 @@
   text-decoration: none;
   font-weight: 500;
   font-size: 1.1rem;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   padding: 0.5rem 1.2rem;
   margin: 0 0.3rem;
   border-radius: 6px;

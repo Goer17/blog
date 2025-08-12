@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { ref, onMounted, computed } from 'vue';
+import { ref, onMounted, computed, watch } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
 import PostLink from '../components/PostLink.vue';
 
 interface Post {
@@ -10,9 +11,12 @@ interface Post {
     image?: string
 }
 
+const route = useRoute()
+const router = useRouter();
+
 const posts = ref<Post[]>([]);
-const currentPage = ref(1);
-const itemsPerPage = ref(4); // Default items per page
+const currentPage = ref(parseInt(route.query.page as string) || 1);
+const itemsPerPage = ref(4);
 
 onMounted(async () => {
   try {
@@ -21,11 +25,21 @@ onMounted(async () => {
       throw new Error('Network response was not ok');
     }
     posts.value = await response.json();
-    console.log(posts.value)
   } catch (error) {
     console.error('Error fetching posts:', error);
   }
 });
+
+watch(
+  () => route.query.page,
+  (newPage) => {
+    const pageNum = parseInt(newPage as string) || 1;
+    if (pageNum !== currentPage.value) {
+      currentPage.value = pageNum;
+    }
+  },
+  { immediate: true }
+);
 
 // Get paginated subset of posts
 const paginatedPosts = computed(() => {
@@ -39,21 +53,36 @@ const totalPages = computed(() => {
   return Math.ceil(posts.value.length / itemsPerPage.value);
 });
 
+function updatePageUrl(page: number, forceReload = false) {
+  const query = { 
+    ...route.query,
+    page: page > 1 ? page.toString() : undefined
+  };
+
+  router.replace({
+    path: route.path,
+    query
+  });
+}
+
 function nextPage() {
   if (currentPage.value < totalPages.value) {
     currentPage.value++;
+    updatePageUrl(currentPage.value);
   }
 }
 
 function prevPage() {
   if (currentPage.value > 1) {
     currentPage.value--;
+    updatePageUrl(currentPage.value);
   }
 }
 
 function goToPage(page: number) {
   if (page >= 1 && page <= totalPages.value) {
     currentPage.value = page;
+    updatePageUrl(page);
   }
 }
 </script>
@@ -64,8 +93,7 @@ function goToPage(page: number) {
     </div>
     
     <div class="pagination" v-if="posts.length > 0">
-        <button @click="prevPage" :disabled="currentPage === 1">⬅️</button>
-        
+        <button @click="prevPage" :disabled="currentPage === 1">&lt;&lt;</button>
         <button 
             v-for="page in totalPages" 
             :key="page" 
@@ -75,7 +103,7 @@ function goToPage(page: number) {
             {{ page }}
         </button>
         
-        <button @click="nextPage" :disabled="currentPage === totalPages">➡️</button>
+        <button @click="nextPage" :disabled="currentPage === totalPages">&gt;&gt;</button>
     </div>
 </template>
 
