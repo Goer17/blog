@@ -18,24 +18,24 @@ const handleImageError = (e: Event) => {
 
 <template>
   <div class="post-link">
-    <router-link 
-      :to="{ path: '/post', query: { name: file } }" 
+    <router-link
+      :to="{ path: '/post', query: { name: file } }"
       class="post-card"
       target="_blank"
     >
       <div class="post-image">
-        <img :src="image" :alt="title" class="post-image__img" @error="handleImageError">
+        <img :src="image" :alt="title" @error="handleImageError">
       </div>
       <div class="post-content">
         <h2 class="post-title">{{ title }}</h2>
         <div class="post-meta">
           <span class="post-time">{{ time }}</span>
-          <span class="post-categories" v-if="category">
-            <span class="post-category" v-for="(cat, index) in category" :key="cat">
-              {{ cat }}<span v-if="index < category.length - 1"> &rArr; </span>
-              <span v-else style="color: transparent;"> &rArr; </span>
-            </span>
-          </span>
+          <div class="post-categories" v-if="category.length">
+            <template v-for="(cat, index) in category" :key="cat">
+              <span class="post-tag">{{ cat }}</span>
+              <span v-if="index < category.length - 1" class="post-tag-sep">&raquo;</span>
+            </template>
+          </div>
         </div>
       </div>
     </router-link>
@@ -44,105 +44,120 @@ const handleImageError = (e: Event) => {
 
 <style scoped>
 .post-link {
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem;
 }
 
 .post-card {
   display: flex;
-  border-radius: 8px;
+  border-radius: var(--radius-md);
   overflow: hidden;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  transition: transform 0.2s, box-shadow 0.2s;
-  background: white;
+  border: 1px solid var(--color-border);
+  transition: all var(--transition);
+  background: var(--color-bg);
   text-decoration: none;
   color: inherit;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  height: 160px;
+  height: 150px;
 }
 
 .post-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transform: translateY(-2px);
+  border-color: var(--color-primary);
+  box-shadow: var(--shadow-md);
 }
 
 .post-image {
-  flex: 0 0 20%;
+  flex: 0 0 180px;
   height: 100%;
   overflow: hidden;
-  position: relative;
 }
 
-.post-image__img {
+.post-image img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: center;
-  transition: transform 0.3s;
+  transition: transform 0.3s ease;
 }
 
-.post-card:hover .post-image__img {
+.post-card:hover .post-image img {
   transform: scale(1.05);
 }
 
 .post-content {
   flex: 1;
-  padding: 1.25rem;
+  padding: 1.25rem 1.5rem;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  min-width: 0;
 }
 
 .post-title {
   margin: 0;
-  font-size: 1.5rem;
+  font-family: var(--font-sans);
+  font-size: 1.25rem;
   font-weight: 600;
   line-height: 1.4;
-  color: #333;
+  color: var(--color-text);
   display: -webkit-box;
+  -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
-  text-overflow: ellipsis;
 }
 
 .post-meta {
   display: flex;
-  flex-direction: column;
+  align-items: center;
   justify-content: space-between;
-  margin-bottom: 0.5rem;
-  font-size: 1rem;
-  color: #666;
+  gap: 0.75rem;
+  flex-wrap: wrap;
 }
 
 .post-time {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--color-text-tertiary);
   font-weight: 500;
 }
 
 .post-categories {
   display: flex;
-  gap: 0.5rem;
+  align-items: center;
+  gap: 0.3rem;
   flex-wrap: wrap;
 }
 
-.post-category {
-  color: #8690b7;
+.post-tag-sep {
+  font-size: 0.7rem;
+  color: var(--color-text-tertiary);
+}
+
+.post-tag {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
   font-weight: 500;
+  color: var(--color-primary);
+  background-color: var(--color-primary-light);
+  padding: 0.15em 0.5em;
+  border-radius: var(--radius-sm);
 }
 
 @media (max-width: 768px) {
   .post-card {
-    height: 140px;
     flex-direction: column;
+    height: auto;
   }
-  
+
   .post-image {
-    flex: 0 0 120px;
+    flex: none;
+    height: 160px;
     width: 100%;
   }
-  
+
   .post-content {
     padding: 1rem;
+    gap: 0.5rem;
   }
-  
+
   .post-title {
     font-size: 1.1rem;
   }

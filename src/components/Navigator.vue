@@ -2,65 +2,98 @@
 </script>
 
 <template>
-  <div id="navigator">
-    <router-link to="/">🏠 Home</router-link>
-    <router-link to="/categories">📖 Categories</router-link>
-    <router-link to="/about">🌐 About</router-link>
-  </div>
+  <nav class="nav">
+    <div class="nav-inner">
+      <router-link to="/" class="nav-brand">YY. Lee</router-link>
+      <div class="nav-links">
+        <router-link to="/" exact>Home</router-link>
+        <router-link to="/categories">Categories</router-link>
+        <router-link to="/about">About</router-link>
+      </div>
+    </div>
+  </nav>
 </template>
 
 <style scoped>
-#navigator {
-  background-color: rgba(230, 242, 255, 0.7);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px); /* Safari 兼容 */
-  padding: 1rem 2rem;
-  border-radius: 12px 12px 0 0;
-  box-shadow: 0 4px 15px rgba(0, 0, 100, 0.1);
-  margin-bottom: 1rem;
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  display: flex;
-  justify-content: center;
-}
-
-#navigator a {
-  color: #2c6ecb;
-  text-decoration: none;
-  font-weight: 500;
-  font-size: 1.1rem;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  padding: 0.5rem 1.2rem;
-  margin: 0 0.3rem;
-  border-radius: 6px;
-  transition: all 0.3s ease;
-  position: relative;
-  overflow: hidden;
-}
-
-#navigator a:hover {
-  background-color: rgba(208, 227, 255, 0.6);
-  color: #1a4d8c;
-}
-
-#navigator a.router-link-active {
-  background-color: rgba(179, 212, 255, 0.7);
-  color: #1a4d8c;
-  font-weight: 600;
-}
-
-#navigator a::after {
-  content: '';
-  position: absolute;
+.nav {
+  position: fixed;
   top: 0;
   left: 0;
   right: 0;
-  bottom: 0;
-  border-radius: 6px;
-  box-shadow: 0 0 8px rgba(100, 149, 237, 0);
-  transition: box-shadow 0.3s ease;
+  z-index: 100;
+  height: var(--nav-height);
+  background-color: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--color-border);
 }
 
-#navigator a:hover::after {
-  box-shadow: 0 0 8px rgba(100, 149, 237, 0.3);
+.nav-inner {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 1.5rem;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.nav-brand {
+  font-family: var(--font-mono);
+  font-weight: 600;
+  font-size: 1.1rem;
+  color: var(--color-text);
+  letter-spacing: -0.02em;
+}
+
+.nav-brand:hover {
+  color: var(--color-primary);
+}
+
+.nav-links {
+  display: flex;
+  gap: 0.25rem;
+}
+
+.nav-links a {
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--color-text-secondary);
+  padding: 0.5rem 0.875rem;
+  border-radius: var(--radius-sm);
+  transition: all var(--transition);
+  position: relative;
+}
+
+.nav-links a:hover {
+  color: var(--color-primary);
+  background-color: var(--color-primary-lighter);
+}
+
+.nav-links a.router-link-active {
+  color: var(--color-primary);
+}
+
+.nav-links a.router-link-active::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0.875rem;
+  right: 0.875rem;
+  height: 2px;
+  background-color: var(--color-primary);
+  border-radius: 1px;
+}
+
+@media (max-width: 768px) {
+  .nav-inner {
+    padding: 0 1rem;
+  }
+
+  .nav-links a {
+    font-size: 0.8rem;
+    padding: 0.4rem 0.6rem;
+  }
 }
 </style>

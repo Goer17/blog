@@ -41,28 +41,22 @@ watch(
   { immediate: true }
 );
 
-// Get paginated subset of posts
 const paginatedPosts = computed(() => {
   const start = (currentPage.value - 1) * itemsPerPage.value;
   const end = start + itemsPerPage.value;
   return posts.value.slice(start, end);
 });
 
-// Calculate total number of pages
 const totalPages = computed(() => {
   return Math.ceil(posts.value.length / itemsPerPage.value);
 });
 
-function updatePageUrl(page: number, forceReload = false) {
-  const query = { 
+function updatePageUrl(page: number) {
+  const query = {
     ...route.query,
     page: page > 1 ? page.toString() : undefined
   };
-
-  router.replace({
-    path: route.path,
-    query
-  });
+  router.replace({ path: route.path, query });
 }
 
 function nextPage() {
@@ -88,59 +82,86 @@ function goToPage(page: number) {
 </script>
 
 <template>
-    <div id="home" v-for="post in paginatedPosts" :key="post.file">
-        <PostLink :file="post.file" :title="post.title" :time="post.time" :category="post.category" :image="post.image" />
+  <div class="home">
+    <div class="post-list">
+      <PostLink
+        v-for="post in paginatedPosts"
+        :key="post.file"
+        :file="post.file"
+        :title="post.title"
+        :time="post.time"
+        :category="post.category"
+        :image="post.image"
+      />
     </div>
-    
-    <div class="pagination" v-if="posts.length > 0">
-        <button @click="prevPage" :disabled="currentPage === 1">&lt;&lt;</button>
-        <button 
-            v-for="page in totalPages" 
-            :key="page" 
-            @click="goToPage(page)"
-            :class="{ active: currentPage === page }"
-        >
-            {{ page }}
-        </button>
-        
-        <button @click="nextPage" :disabled="currentPage === totalPages">&gt;&gt;</button>
+
+    <div class="pagination" v-if="totalPages > 1">
+      <button class="page-btn" @click="prevPage" :disabled="currentPage === 1">
+        &larr;
+      </button>
+      <button
+        v-for="page in totalPages"
+        :key="page"
+        class="page-btn"
+        :class="{ active: currentPage === page }"
+        @click="goToPage(page)"
+      >
+        {{ page }}
+      </button>
+      <button class="page-btn" @click="nextPage" :disabled="currentPage === totalPages">
+        &rarr;
+      </button>
     </div>
+  </div>
 </template>
 
 <style scoped>
+.home {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
 .pagination {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 8px;
-    margin-top: 20px;
-    padding: 15px;
-    background-color: #e6f7ff;
-    border-radius: 8px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 1rem 0;
 }
 
-.pagination button {
-    padding: 8px 12px;
-    background-color: #91d5ff;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: all 0.3s;
+.page-btn {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  font-weight: 500;
+  min-width: 2.25rem;
+  height: 2.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 0.5rem;
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  color: var(--color-text-secondary);
+  transition: all var(--transition);
 }
 
-.pagination button:hover:not(:disabled) {
-    background-color: #69c0ff;
-    color: white;
+.page-btn:hover:not(:disabled) {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+  background-color: var(--color-primary-lighter);
 }
 
-.pagination button:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
+.page-btn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
 }
 
-.pagination button.active {
-    background-color: #1890ff;
-    color: white;
-    font-weight: bold;
+.page-btn.active {
+  background-color: var(--color-primary);
+  border-color: var(--color-primary);
+  color: white;
+  font-weight: 600;
 }
 </style>
