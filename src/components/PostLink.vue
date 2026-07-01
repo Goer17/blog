@@ -93,7 +93,7 @@ const handleImageError = (e: Event) => {
 
 .post-title {
   margin: 0;
-  font-family: var(--font-sans);
+  font-family: var(--font-mono);
   font-size: 1.25rem;
   font-weight: 600;
   line-height: 1.4;

@@ -252,6 +252,7 @@ const countPosts = (node: CategoryNode): number => {
 }
 
 .post-link {
+  font-family: var(--font-mono);
   font-size: 0.9rem;
   color: var(--color-text);
   text-decoration: none;

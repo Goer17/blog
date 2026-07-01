@@ -1,12 +1,12 @@
 [
   {
-    "file": "hello",
-    "title": "Hello, world!",
-    "time": "2025-8-12",
+    "file": "AI-Infra|Triton|triton_basics",
+    "title": "Triton Learning Notes I: Basics",
+    "time": "2026-6-21",
+    "image": "bg/triton.png",
     "category": [
-      "Default",
-      "Welcome"
-    ],
-    "image": "bg/default.png"
+      "AI-Infra",
+      "Triton"
+    ]
   }
 ]

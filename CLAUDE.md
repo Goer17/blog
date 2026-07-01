@@ -8,7 +8,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - `npm run build` — production build to `dist/`
 - `npm run preview` — preview production build
 - `npm run deploy` — build and deploy to GitHub Pages via gh-pages
-- `npm run new -- <post-name>` — scaffold a new post in `public/posts_/`
+- `npm run new -- <post-name>` — scaffold a new post in `public/posts/`
 - `npm run update` — regenerate `public/posts.json` from post frontmatter
 
 ## Git
@@ -21,11 +21,11 @@ Vue 3 + TypeScript SPA using Vite, with hash-based routing (`createWebHashHistor
 
 ### Content pipeline
 
-Posts are markdown files in `public/posts_/` with YAML frontmatter (`title`, `time`, `category`, `image`, optional `z-index` for pinning). The `scripts/update.js` script parses all post frontmatter and writes `public/posts.json`, which the frontend fetches at runtime. Categories are hierarchical arrays (e.g. `["CS", "Algorithms"]`). After adding or editing posts, run `npm run update` to regenerate the index.
+Posts are markdown files in `public/posts/` with YAML frontmatter (`title`, `time`, `category`, `image`, optional `z-index` for pinning). The `scripts/update.js` script parses all post frontmatter and writes `public/posts.json`, which the frontend fetches at runtime. Categories are hierarchical arrays (e.g. `["CS", "Algorithms"]`). After adding or editing posts, run `npm run update` to regenerate the index.
 
 ### Routing
 
-Four routes defined in `src/router/index.ts`: `/` (Home), `/about`, `/categories`, `/post?name=<filename>`. Posts are loaded by fetching `/posts_/<name>.md` and rendering client-side with markdown-it (with plugins for syntax highlighting, MathJax, and task lists). The frontmatter block is stripped before rendering.
+Four routes defined in `src/router/index.ts`: `/` (Home), `/about`, `/categories`, `/post?name=<filename>`. Posts are loaded by fetching `/posts/<name>.md` and rendering client-side with markdown-it (with plugins for syntax highlighting, MathJax, and task lists). The frontmatter block is stripped before rendering.
 
 ### Key components
 

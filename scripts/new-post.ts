@@ -9,7 +9,7 @@ if (!postName) {
   process.exit(1);
 }
 
-const postsDir = path.resolve('public/posts_');
+const postsDir = path.resolve('public/posts');
 const mdFilePath = path.join(postsDir, `${postName}.md`);
 
 // 1. Create posts directory if it does not exist
@@ -27,7 +27,6 @@ const dateStr = `${now.getFullYear()}-${now.getMonth() + 1}-${now.getDate()}`;
 const mdContent = `---
 title: ${postName}
 time: ${dateStr}
-category: []
 ---
 `;
 fs.writeFileSync(mdFilePath, mdContent, 'utf-8');

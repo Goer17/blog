@@ -14,6 +14,7 @@ const route = useRoute();
 const content = ref('');
 const renderedContent = ref('');
 const isLoading = ref(false);
+const postDir = ref('');
 
 interface PostMeta {
   file: string;
@@ -46,6 +47,66 @@ const md = new MarkdownIt({
 .use(markdownItTaskLists)
 .use(markdownItMathjax3);
 
+// Override fence renderer to add line numbers and copy button
+const originalFence = md.renderer.rules.fence;
+
+md.renderer.rules.fence = function(tokens: any, idx: any, options: any, env: any, self: any) {
+  const token = tokens[idx];
+  const info = token.info ? md.utils.unescapeAll(token.info).trim() : '';
+  const langName = info.split(/\s+/g)[0] || '';
+
+  const highlighted = originalFence(tokens, idx, options, env, self);
+
+  const code = token.content;
+  const rawLines = code.split('\n');
+  const actualLines = rawLines[rawLines.length - 1] === '' ? rawLines.slice(0, -1) : rawLines;
+  const lineCount = Math.max(actualLines.length, 1);
+
+  let lineNums = '';
+  for (let i = 1; i <= lineCount; i++) {
+    lineNums += `<span class="code-line-num">${i}</span>`;
+  }
+
+  return `<div class="code-block" data-lang="${md.utils.escapeHtml(langName || 'code')}">
+    <div class="code-header">
+      <span class="code-lang">${md.utils.escapeHtml(langName)}</span>
+      <button class="copy-btn">COPY</button>
+    </div>
+    <div class="code-body">
+      <div class="code-lines">${lineNums}</div>
+      ${highlighted}
+    </div>
+  </div>`;
+};
+
+function fixHtmlImagePaths(html: string, dir: string): string {
+  return html.replace(/<img\s[^>]*src="([^"]+)"[^>]*>/gi, (match, src) => {
+    if (src && !src.startsWith('http') && !src.startsWith('/') && !src.startsWith('data:')) {
+      return match.replace(`src="${src}"`, `src="/posts/${dir}/${src}"`);
+    }
+    return match;
+  });
+}
+
+const originalImage = md.renderer.rules.image ||
+  function(tokens: any, idx: any, options: any, _env: any, self: any) {
+    return self.renderToken(tokens, idx, options);
+  };
+
+md.renderer.rules.image = function(tokens: any, idx: any, options: any, env: any, self: any) {
+  const token = tokens[idx];
+  const src = token.attrGet('src');
+  if (src && !src.startsWith('http') && !src.startsWith('/') && !src.startsWith('data:')) {
+    token.attrSet('src', `/posts/${postDir.value}/${src}`);
+  }
+  const alt = token.content || token.attrGet('alt') || '';
+  const img = originalImage(tokens, idx, options, env, self);
+  if (alt) {
+    return `<figure>${img}<figcaption>${md.utils.escapeHtml(alt)}</figcaption></figure>`;
+  }
+  return img;
+};
+
 const originalHeadingOpen = md.renderer.rules.heading_open ||
   function(tokens: any, idx: any, options: any, _env: any, self: any) {
     return self.renderToken(tokens, idx, options);
@@ -73,6 +134,8 @@ async function loadPostMeta(name: string) {
     if (!response.ok) return;
     const posts: PostMeta[] = await response.json();
     postMeta.value = posts.find(p => p.file === name) || null;
+    const lastSep = name.lastIndexOf('|');
+    postDir.value = lastSep >= 0 ? name.slice(0, lastSep).replace(/\|/g, '/') : '';
   } catch {}
 }
 
@@ -81,7 +144,8 @@ async function loadMarkdownFile() {
   headingIdCounter = 0;
   const name = route.query.name?.toString() || '';
   await loadPostMeta(name);
-  const path = `/posts_/${name}.md`;
+  const filePath = name.replace(/\|/g, '/');
+  const path = `/posts/${filePath}.md`;
   try {
     const response = await fetch(path, {
       headers: { 'Accept': 'text/plain' }
@@ -93,7 +157,7 @@ async function loadMarkdownFile() {
     content.value = "## This post doesn't exist.    :(";
   } finally {
     const env: any = {};
-    renderedContent.value = md.render(content.value, env);
+    renderedContent.value = fixHtmlImagePaths(md.render(content.value, env), postDir.value);
     toc.value = env.__toc || [];
     isLoading.value = false;
 
@@ -135,6 +199,24 @@ function scrollToHeading(id: string) {
     activeHeading.value = id;
     tocOpen.value = false;
   }
+}
+
+function handleCopyClick(e: MouseEvent) {
+  const target = e.target as HTMLElement;
+  const btn = target.closest('.copy-btn') as HTMLElement | null;
+  if (!btn) return;
+
+  const codeBlock = btn.closest('.code-block') as HTMLElement | null;
+  if (!codeBlock) return;
+
+  const codeEl = codeBlock.querySelector('code');
+  if (!codeEl) return;
+
+  const text = codeEl.textContent || '';
+  navigator.clipboard.writeText(text).then(() => {
+    btn.textContent = 'COPIED';
+    setTimeout(() => { btn.textContent = 'COPY'; }, 1500);
+  });
 }
 
 watch(() => route.query.name, () => loadMarkdownFile(), { immediate: true });
@@ -207,7 +289,7 @@ onUnmounted(() => { if (observer) observer.disconnect(); });
             </div>
           </div>
         </header>
-        <div class="markdown-body" v-html="renderedContent"></div>
+        <div class="markdown-body" v-html="renderedContent" @click="handleCopyClick"></div>
       </template>
     </article>
   </div>
