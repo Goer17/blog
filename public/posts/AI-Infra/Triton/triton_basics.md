@@ -137,7 +137,7 @@ if __name__ == "__main__":
 
 
 
-## Fused Softmax
+### Example: Fused Softmax
 
 Compared to some operations implemented with naive PyTorch, Triton can significantly accelerate the computation by reducing IO reads and writes. Softmax is a typical example.
 

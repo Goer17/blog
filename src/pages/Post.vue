@@ -80,11 +80,28 @@ md.renderer.rules.fence = function(tokens: any, idx: any, options: any, env: any
 };
 
 function fixHtmlImagePaths(html: string, dir: string): string {
-  return html.replace(/<img\s[^>]*src="([^"]+)"[^>]*>/gi, (match, src) => {
+  return html.replace(/<img\s([^>]*?)\/?>/gi, (match, attrs, offset: number) => {
+    let fixed = match;
+
+    const srcMatch = attrs.match(/src="([^"]*)"/i);
+    const src = srcMatch ? srcMatch[1] : '';
     if (src && !src.startsWith('http') && !src.startsWith('/') && !src.startsWith('data:')) {
-      return match.replace(`src="${src}"`, `src="/posts/${dir}/${src}"`);
+      fixed = fixed.replace(`src="${src}"`, `src="/posts/${dir}/${src}"`);
     }
-    return match;
+
+    // Skip images already wrapped in a <figure> by the markdown image renderer,
+    // otherwise they'd get a duplicate figcaption.
+    const alreadyInFigure = html.slice(0, offset).endsWith('<figure>');
+    if (alreadyInFigure) {
+      return fixed;
+    }
+
+    const altMatch = attrs.match(/alt="([^"]*)"/i);
+    const alt = altMatch ? altMatch[1] : '';
+    if (alt) {
+      return `<figure>${fixed}<figcaption>${alt}</figcaption></figure>`;
+    }
+    return fixed;
   });
 }
 
